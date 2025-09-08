@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@flatfinder/shared": [
+        "../../packages/shared/src/index.ts"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": ["node_modules"]
+}

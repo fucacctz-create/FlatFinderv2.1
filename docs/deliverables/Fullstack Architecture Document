@@ -1,0 +1,33 @@
+# Fullstack Architecture Document: FlatFinder Web2 MVP
+**Version:** 1.0
+**Date:** September 7, 2025
+
+## 1. High-Level Architecture
+The system is a serverless full-stack application built on **Google Cloud Platform (GCP)**. It features a Next.js frontend, a Node.js backend using Firebase Cloud Functions, and Firebase Firestore as the primary database. This architecture is designed for scalability, security, and rapid development. Key business logic (authentication, payments, KYC) is delegated to trusted third-party services to minimize liability and development overhead.
+
+### 1.1. System Diagram
+
+```mermaid
+graph TD
+    subgraph User Interaction
+        User[Renter] --> WebApp[Frontend App (Next.js on Firebase Hosting)]
+    end
+
+    subgraph Authentication
+        WebApp -- Login/Signup --> Clerk[🔒 Clerk Auth]
+        WebApp -- Crypto Pay --> Wallet[WalletConnect]
+    end
+
+    subgraph Backend Services (GCP/Firebase)
+        WebApp -- API Calls --> API[Backend API (Firebase Functions)]
+        API -- Data I/O --> DB[(🔥 Firebase Firestore)]
+        Scraper[🕷️ Scraping Agent (Cloud Function)] -- Raw Data --> API
+        API -- Verification --> LandRegistry[🏛️ Land Registry APIs]
+        API -- Geocoding --> GoogleMaps[📍 Google Maps API]
+    end
+
+    subgraph External & Automation
+        Scraper --> Craigslist & Kijiji
+        WebApp -- Fiat Payments --> Stripe[💳 Stripe]
+        API -- Webhook --> Marketing[📢 Marketing Service (n8n/Other)]
+    end
